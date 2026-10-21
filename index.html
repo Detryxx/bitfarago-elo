@@ -105,7 +105,13 @@
     </div>
 
     <!-- HATODIK -->
-
+    <div id="memoryGameWinDiv" class="my-5 border rounded-md bg-orange-200 mx-10 flex"><div class="hidden"><p>Nyertél!</p><br><p>Időd: <span id="memoryGameWinTime"></span></p> </div>
+    <div id="memoryGameMainDiv" class="bg-slate-500 rounded-lg border border-slate-300 text-center w-fit p-3 m-5 mx-auto"><canvas width="500" height="500" id="memoryGame" class="border"></canvas>  <div id="memoryGameInitDiv" class="mx-auto"><label for="memoryGameDifficulty">Nehézség: </label>
+        <input type="number" min="5" max="9" name="" id="memoryGameDifficulty">
+        <button class="" onclick="initMemoryGame()">Kezdés!</button>
+    </div></div>
+   
+    </div>
   </body>
   <script src=""></script>
 </html>

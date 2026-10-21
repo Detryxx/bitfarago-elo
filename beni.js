@@ -1,3 +1,5 @@
+// Első
+
 let chairs = [];
 let currPlayer = true;
 let currentNonPlaceables = "";
@@ -128,4 +130,88 @@ function chairGame() {
 
   document.getElementById("chairsDiv").innerHTML =
     `<div class="${mainDivClasses}">${chairsToHTML}</div>`;
+}
+
+// Második
+
+const circleSize = 10;
+const fps = 60;
+let circles = [];
+let memoryGameCtx;
+let memoryGameWaiters = [];
+let circleAmount = 3;
+let isMemoryGameOver = false;
+let canvasElement;
+
+function initMemoryGame() {
+  canvasElement = document.getElementById("memoryGame");
+  memoryGameCtx = canvasElement.getContext("2d");
+  canvasElement.addEventListener("click", memoryGameClick);
+  canvasElement.addEventListener("mousemove", memoryGameMouse);
+  circleAmount = document.getElementById("memoryGameDifficulty").value;
+  for (let i = 0; i < circleAmount; i++) {
+    let x = Math.floor(Math.random() * 485);
+    let y = Math.floor(Math.random() * 485);
+    // for (e of circles){if (e.x - x >  ){}}
+
+    circles.push(new memoryGameObject(x,y,i));
+  }
+}
+
+class memoryGameObject {
+  constructor(x, y, number) {
+    this.x = x;
+    this.y = y;
+    this.isVisible = false;
+    this.isNumberVisible = true;
+    this.number = number;
+  }
+
+  async draw() {
+    memoryGameCtx.beginPath();
+    memoryGameCtx.arc(this.x, this.y, circleSize, 0, 2 * Math.PI);
+    memoryGameCtx.lineWidth = 1;
+    memoryGameCtx.strokeStyle = "#999999";
+    memoryGameCtx.fillText(this.number, this.x, this.y);
+    memoryGameCtx.stroke();
+  }
+}
+
+function memoryGameMouse() {
+  var rect = canvasElement.getBoundingClientRect();
+  var x = event.clientX - rect.left;
+  var y = event.clientY - rect.top;
+}
+
+async function memoryGameClick() {
+  var rect = canvasElement.getBoundingClientRect();
+  var x = event.clientX - rect.left;
+  var y = event.clientY - rect.top;
+  for (e of circles) {
+    document.getElementById("piros_win").innerHTML =
+      e.color == "red" ? "nyertél" : "vesztettél";
+    for (i of cards) {
+      i.can_hover = false;
+
+      gameover_callback();
+      canvasElement.removeEventListener("mousemove", mouse);
+      canvasElement.removeEventListener("click", click);
+      break;
+    }
+  }
+}
+
+function memoryGameRender() {
+  memoryGameCtx.clearRect(0, 0, 500, 500);
+  for (e of circles) {
+    e.draw();
+  }
+  const waiter = memoryGameWaiters.slice();
+  for (e of waiter) {
+    e();
+  }
+  memoryGameWaiters = [];
+  if (!isMemoryGameOver) {
+    setTimeout(memoryGameRender, 1000 / fps);
+  }
 }
