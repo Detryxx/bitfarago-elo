@@ -149,19 +149,19 @@ function collisionDetection(x, y) {
   for (e of allXPosS) {
     for (let i = x - circleSize; i < x + circleSize + 1; i++) {
       if (e === i) {
-        reutrn(false);
+        return false;
       } else {
-        for (e of allyPosS) {
+        for (e2 of allYPosS) {
           for (let i = y - circleSize; i < y + circleSize + 1; i++) {
-            if (e === i) {
-              reutrn(false);
+            if (e2 === i) {
+              return false;
             }
           }
         }
       }
     }
   }
-  retuurn(true);
+  return true;
 }
 
 function initMemoryGame() {
@@ -171,15 +171,16 @@ function initMemoryGame() {
   canvasElement.addEventListener("mousemove", memoryGameMouse);
   circleAmount = document.getElementById("memoryGameDifficulty").value;
   for (let i = 0; i < circleAmount; i++) {
-    let x = Math.floor(Math.random() * 485);
-    let y = Math.floor(Math.random() * 485);
+    let x = Math.floor(Math.random() * 475);
+    let y = Math.floor(Math.random() * 475);
+
     while (
       allXPosS.includes(x) ||
       allYPosS.includes(y) ||
       !collisionDetection(x, y)
     ) {
-      x = Math.floor(Math.random() * 485);
-      y = Math.floor(Math.random() * 485);
+      x = Math.floor(Math.random() * 475);
+      y = Math.floor(Math.random() * 475);
       console.log("while");
     }
 
