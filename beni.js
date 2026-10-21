@@ -142,6 +142,27 @@ let memoryGameWaiters = [];
 let circleAmount = 3;
 let isMemoryGameOver = false;
 let canvasElement;
+let allXPosS = [];
+let allYPosS = [];
+
+function collisionDetection(x, y) {
+  for (e of allXPosS) {
+    for (let i = x - circleSize; i < x + circleSize + 1; i++) {
+      if (e === i) {
+        reutrn(false);
+      } else {
+        for (e of allyPosS) {
+          for (let i = y - circleSize; i < y + circleSize + 1; i++) {
+            if (e === i) {
+              reutrn(false);
+            }
+          }
+        }
+      }
+    }
+  }
+  retuurn(true);
+}
 
 function initMemoryGame() {
   canvasElement = document.getElementById("memoryGame");
@@ -152,9 +173,19 @@ function initMemoryGame() {
   for (let i = 0; i < circleAmount; i++) {
     let x = Math.floor(Math.random() * 485);
     let y = Math.floor(Math.random() * 485);
-    // for (e of circles){if (e.x - x >  ){}}
+    while (
+      allXPosS.includes(x) ||
+      allYPosS.includes(y) ||
+      !collisionDetection(x, y)
+    ) {
+      x = Math.floor(Math.random() * 485);
+      y = Math.floor(Math.random() * 485);
+      console.log("while");
+    }
 
-    circles.push(new memoryGameObject(x,y,i));
+    circles.push(new memoryGameObject(x, y, i));
+    allXPosS.push(x);
+    allYPosS.push(y);
   }
 }
 
