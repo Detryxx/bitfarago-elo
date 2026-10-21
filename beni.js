@@ -1,3 +1,5 @@
+// Első
+
 let chairs = [];
 let currPlayer = true;
 let currentNonPlaceables = "";
@@ -5,7 +7,7 @@ let chairAmount = 0;
 let playerOne = ["", 0];
 let playerTwo = ["", 0];
 let alreadyPlacedHere = [];
-let isChairGameOver = false;
+let isChairGameOver = 0;
 
 function canStartChairGame() {
   playerOne[0] = document.getElementById("chairGamePlayer1").value;
@@ -18,16 +20,6 @@ function canStartChairGame() {
 }
 
 function moveToChair(chairNum) {
-  for (let i = 0; i < chairAmount; i++) {
-    if (
-      document
-        .getElementById(`chairGameChair${i}Button`)
-        .getAttribute(onclick) !== ""
-    ) {
-      isChairGameOver = false;
-    }
-  }
-
   for (
     let i = alreadyPlacedHere[alreadyPlacedHere.length - 1] - 1;
     i < alreadyPlacedHere[alreadyPlacedHere.length - 1] + 2;
@@ -81,9 +73,49 @@ function moveToChair(chairNum) {
     }
   }
   alreadyPlacedHere.push(chairNum);
+  for (let i = 0; i < chairAmount; i++) {
+    console.log(isChairGameOver);
+    if (
+      document
+        .getElementById(`chairGameChair${i}Button`)
+        .getAttribute("onclick") !== ""
+    ) {
+      isChairGameOver++;
+    }
+  }
+  if (isChairGameOver === 0) {
+    chairGameOver();
+  } else isChairGameOver = 0;
 }
 
-function chairGameOver() {}
+function chairGameOver() {
+  document.getElementById("chairsDiv").classList.add("hidden");
+  document.getElementById("chairGameOverDiv").classList.remove("hidden");
+  document.getElementById("chairGamePointsForPlayer1").innerHTML = playerOne[1];
+  document.getElementById("chairGamePointsForPlayer2").innerHTML = playerTwo[1];
+  if (playerOne[1] > playerTwo[1]) {
+    document
+      .getElementById("chairGamePointsForPlayer1")
+      .classList.add("text-green-500");
+    document
+      .getElementById("chairGamePointsForPlayer2")
+      .classList.add("text-red-500");
+  } else if (playerTwo[1] < playerOne[1]) {
+    document
+      .getElementById("chairGamePointsForPlayer2")
+      .classList.add("text-green-500");
+    document
+      .getElementById("chairGamePointsForPlayer1")
+      .classList.add("text-red-500");
+  } else {
+    document
+      .getElementById("chairGamePointsForPlayer1")
+      .classList.add("text-green-500");
+    document
+      .getElementById("chairGamePointsForPlayer2")
+      .classList.add("text-green-500");
+  }
+}
 
 function chairGame() {
   chairAmount = document.getElementById("chairGameNumberInput").value;
@@ -98,4 +130,150 @@ function chairGame() {
 
   document.getElementById("chairsDiv").innerHTML =
     `<div class="${mainDivClasses}">${chairsToHTML}</div>`;
+}
+
+// Második
+
+const circleSize = 10;
+const fps = 60;
+let circles = [];
+let memoryGameCtx;
+let memoryGameWaiters = [];
+let circleAmount = 3;
+let isMemoryGameOver = false;
+let canvasElement;
+let clicked_circles = [];
+let allXPosS = [];
+let allYPosS = [];
+
+function collisionDetection(x, y) {
+  for (e of allXPosS) {
+    for (let i = x - circleSize; i < x + circleSize + 1; i++) {
+      if (e === i) {
+        return false;
+      } else {
+        for (e2 of allYPosS) {
+          for (let i = y - circleSize; i < y + circleSize + 1; i++) {
+            if (e2 === i) {
+              return false;
+            }
+          }
+        }
+      }
+    }
+  }
+  return true;
+}
+
+function initMemoryGame() {
+  canvasElement = document.getElementById("memoryGame");
+  memoryGameCtx = canvasElement.getContext("2d");
+  canvasElement.addEventListener("click", memoryGameClick);
+  canvasElement.addEventListener("mousemove", memoryGameMouse);
+  circleAmount = document.getElementById("memoryGameDifficulty").value;
+  for (let i = 1; i < circleAmount+1; i++) {
+    let x = Math.floor(Math.random() * 475);
+    let y = Math.floor(Math.random() * 475);
+
+    while (
+      allXPosS.includes(x) ||
+      allYPosS.includes(y) ||
+      !collisionDetection(x, y)
+    ) {
+      x = Math.floor(Math.random() * 475);
+      y = Math.floor(Math.random() * 475);
+      console.log("while");
+    }
+
+    circles.push(new memoryGameObject(x, y, i));
+    allXPosS.push(x);
+    allYPosS.push(y);
+  }
+
+  memoryGameRender();
+}
+
+class memoryGameObject {
+  constructor(x, y, number) {
+    this.x = x;
+    this.y = y;
+    this.isVisible = false;
+    this.isNumberVisible = true;
+    this.number = number;
+  }
+
+  draw() {
+    memoryGameCtx.beginPath();
+    memoryGameCtx.arc(this.x, this.y, circleSize, 0, 2 * Math.PI);
+    memoryGameCtx.lineWidth = 1;
+    memoryGameCtx.strokeStyle = "#999999";
+    memoryGameCtx.fillText(this.number, this.x, this.y);
+    memoryGameCtx.stroke();
+  }
+  is_hovering(x, y) {
+    if (
+      x < this.x + circleSize &&
+      x > this.x - circleSize &&
+      (y < this.y + circleSize, y > this.y - circleSize)
+    ) {
+      return true;
+    }
+  }
+}
+
+function memoryGameMouse() {
+  var rect = canvasElement.getBoundingClientRect();
+  var x = event.clientX - rect.left;
+  var y = event.clientY - rect.top;
+}
+
+async function memoryGameClick() {
+  var rect = canvasElement.getBoundingClientRect();
+  var x = event.clientX - rect.left;
+  var y = event.clientY - rect.top;
+  for (e of circles) {
+    if (e.is_hovering(x, y)) {
+      if (e.number == clicked_circles.length+1) {
+        if (e.number==1){
+          for (e of circles){
+            e.isNumberVisible=false
+          }
+        }
+        clicked_circles.push(e);
+        e.isVisible = false;
+        if (e.number == circles.length - 1) {
+          win();
+        }
+      } else {
+        gameover();
+      }
+      break;
+    }
+  }
+}
+
+function memoryGameRender() {
+  memoryGameCtx.clearRect(0, 0, 500, 500);
+  for (e of circles) {
+    e.draw();
+  }
+  const waiter = memoryGameWaiters.slice();
+  for (e of waiter) {
+    e();
+  }
+  memoryGameWaiters = [];
+  if (!isMemoryGameOver) {
+    setTimeout(memoryGameRender, 1000 / fps);
+  }
+}
+function gameover() {
+  console.log("gameover");
+  circles = [];
+  isMemoryGameOver = true;
+  //TODO valami ami gameover
+}
+function win() {
+  circles = [];
+  isMemoryGameOver = true;
+  console.log("win");
 }
