@@ -1,4 +1,5 @@
 
+// ELSO FELADAT
 function relativ_primek() {
     const primes_div = document.getElementById("primes_div");
     const input = document.getElementById("szam1");
@@ -22,7 +23,6 @@ function relativ_primek() {
     })
     return relativ_primes;
 }
-
 function LNKO(a, b) {
     if (a == b) { return a }
     else {
@@ -32,5 +32,17 @@ function LNKO(a, b) {
             }
         }
     }
+}
+
+// OTODIK FELADAT
+function generate_bomb() {
+    let possible_colors_in_order = ['green', 'yellow', 'red', 'blue', 'black', 'white'];
+    const wires_div = document.getElementById("wire_div");
+    
+
+}
+
+function cut_wire(wire) {
+
 }
 
