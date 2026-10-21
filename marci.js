@@ -1,4 +1,13 @@
 let piros=null
+
+function random(a,b){
+    return Math.floor(Math.random() *(b-a) +a)
+}
+function wait(time) {
+    return new Promise((r,_)=>{setTimeout(r,time*1000)})
+}
+
+
 async function piros_init(){
 const fps=60
 let ctx
@@ -77,7 +86,7 @@ class Card {
     }
   }
   is_hovering(x, y) {
-    console.log(this.color,x,y,this.x + this.sx / 2,this.x - this.sx / 2,this.y + this.sy / 2,this.y - this.sy / 2)
+    // console.log(this.color,x,y,this.x + this.sx / 2,this.x - this.sx / 2,this.y + this.sy / 2,this.y - this.sy / 2)
     const res =
       this.can_hover &&
       x < this.x + this.sx / 2 &&
@@ -107,7 +116,7 @@ class Card {
 
 
 async function place_cards(time=1,x_positions=[0,1,2]){
-    console.log("placecards")
+    // console.log("placecards")
     for(i in cards){
         const card=cards[i]
         card.move_to(50+105*x_positions[i],150,time)
@@ -131,12 +140,6 @@ function render(){
 function wait_frame() {
     return new Promise((r,_)=>{waiters.push(r)})
 }
-function wait(time) {
-    return new Promise((r,_)=>{setTimeout(r,time*1000)})
-}
-function random(a,b){
-    return Math.floor(Math.random() *(b-a) +a)
-}
 
 async function gameloop(){
     can_click=false
@@ -149,7 +152,7 @@ async function gameloop(){
         let num=[0,1,2]
         let order=[]
         while(num.length>0 && previous[0]!=order[0]){
-
+            
             order.push(num.splice(random(0,num.length),1)[0])
         }
         if (previous[0]==order[0]){
@@ -193,9 +196,124 @@ async function click(){
     }
 }
 
+
 await new Promise((r,_)=>{gameover_callback=r})
 gameover=true
 console.log(piros)
 piros=null
 console.log(piros)
+}
+
+let seta=null
+async function seta_init(){
+    function randompos(){
+        return [random(0,map_size),random(0,map_size)]
+    }
+
+    let gameover_callback
+    const map_size=parseInt(document.getElementById("seta_map_size").value)
+    const map=document.getElementById("seta_map")
+    const wait_time=parseFloat(document.getElementById("seta_wait").value)
+    const directions=[[0,1],[1,0],[0,-1],[-1,0]]
+    let tiles=[]
+    let bot_pos=randompos()
+
+    function get_tile_element(x,y){
+        return document.getElementById(`seta-${x}-${y}`)
+    }
+    function set_tile_color_text(x,y,color,text){
+        // console.log(x,y,color,text)
+        document.getElementById(`seta-${x}-${y}`).style.backgroundColor=color
+        document.getElementById(`seta-${x}-${y}`).innerHTML=text
+    }
+    function get_tile(x,y){
+        return tiles[y][x]
+    }
+    function set_tile(x,y,color){
+        tiles[y][x]=val
+    }
+    function get_tilev(v){
+        try{
+
+            return tiles[v[1]][v[0]]
+        }catch{
+            return 99999
+        }
+    }
+    function set_tilev(v,val){
+        tiles[v[1]][v[0]]=val
+    }
+    function add(v1,v2){
+        return [v1[0]+v2[0],v1[1]+v2[1]]
+    }
+
+    function genmap(){
+        map.innerHTML=""
+        for (let y=0;y<map_size;y++){
+            let array=[]
+            let html="<tr>"
+            for(let x=0;x<map_size;x++){
+                html+=`<td class='seta' id='seta-${x}-${y}'></td>`
+                array.push(0)
+            }
+            html+="</tr>"
+            map.innerHTML+=html
+            tiles.push(array)
+        }
+        // console.log(tiles,map.innerHTML)
+        for (let i=0;i<map_size*map_size/10;i++){
+            let rand=randompos()
+            while(get_tilev(rand)=="w"){
+                rand=randompos()
+                
+            }
+            set_tilev(rand,"w")
+
+        }
+        
+    }
+    function is_bot_here(x,y){
+        return bot_pos[1]==y &&bot_pos[0]==x
+    }
+    genmap()
+    function gameloop(){
+        let possible=[]
+        let min=9999
+        for (e of directions){
+            const val=get_tilev(add(bot_pos,e))
+            if (val!="w"){
+                
+                if(min>val){
+                    possible=[e]
+                    min=val
+                }
+                else if (min==val){
+                    possible.push(e)
+                }
+            }
+            
+        }
+        bot_pos=add(bot_pos,possible[random(0,possible.length)])
+        set_tilev(bot_pos,get_tilev(bot_pos)+1)
+        
+        for(y in tiles){
+            for(x in tiles){
+                if (get_tile(x,y)!="w"){
+                    
+                    set_tile_color_text(x,y,is_bot_here(x,y)?"blue":"red",get_tile(x,y))
+                }
+                else{
+                    set_tile_color_text(x,y,"black","")
+                }
+                
+            }
+        }
+        //*parseFloat(wait_time.value)
+        
+    }
+    while (true){
+        gameloop()
+        await new Promise((r)=>{setTimeout(r,wait_time*1000)})
+    }
+    
 }
