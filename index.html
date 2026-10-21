@@ -6,9 +6,9 @@
     <link rel="stylesheet" href="style.css" />
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- TODO:MAJD AZ OLDAL VÉGÉN LEGYEN BELINKELVE AZ OSSZESITETT JS FILE!!! -->
     <script src="marci.js"></script>
     <script src="beni.js"></script>
-    <script src="vince.js"></script>
   </head>
   <body>
     <!-- ELSO -->
@@ -94,11 +94,12 @@
         <div class="bg-gray-500 border-2 rounded-sm p-2">
           <div>
             <label for="wire_count">Vezetékek száma:</label>
-            <input type="number" name="wire_count" id="wire_count" >
+            <input type="number" name="wire_count" id="wire_count">
           </div>
           <div id="wire_div" class="flex justify-around">
-            <div id="wire_${count}" class="w-5 h-50 bg-yellow-300 cursor-pointer hover:outline-1" onclick="cut_wire(this)"></div>
+            
           </div>
+          <div id="end"></div>
         </div>
       </div>
     </div>
@@ -106,5 +107,5 @@
     <!-- HATODIK -->
 
   </body>
-  <script src=""></script>
+  <script src="vince.js"></script>
 </html>
