@@ -5,7 +5,7 @@ let chairAmount = 0;
 let playerOne = ["", 0];
 let playerTwo = ["", 0];
 let alreadyPlacedHere = [];
-let isChairGameOver = false;
+let isChairGameOver = 0;
 
 function canStartChairGame() {
   playerOne[0] = document.getElementById("chairGamePlayer1").value;
@@ -18,16 +18,6 @@ function canStartChairGame() {
 }
 
 function moveToChair(chairNum) {
-  for (let i = 0; i < chairAmount; i++) {
-    if (
-      document
-        .getElementById(`chairGameChair${i}Button`)
-        .getAttribute(onclick) !== ""
-    ) {
-      isChairGameOver = false;
-    }
-  }
-
   for (
     let i = alreadyPlacedHere[alreadyPlacedHere.length - 1] - 1;
     i < alreadyPlacedHere[alreadyPlacedHere.length - 1] + 2;
@@ -81,9 +71,49 @@ function moveToChair(chairNum) {
     }
   }
   alreadyPlacedHere.push(chairNum);
+  for (let i = 0; i < chairAmount; i++) {
+    console.log(isChairGameOver);
+    if (
+      document
+        .getElementById(`chairGameChair${i}Button`)
+        .getAttribute("onclick") !== ""
+    ) {
+      isChairGameOver++;
+    }
+  }
+  if (isChairGameOver === 0) {
+    chairGameOver();
+  } else isChairGameOver = 0;
 }
 
-function chairGameOver() {}
+function chairGameOver() {
+  document.getElementById("chairsDiv").classList.add("hidden");
+  document.getElementById("chairGameOverDiv").classList.remove("hidden");
+  document.getElementById("chairGamePointsForPlayer1").innerHTML = playerOne[1];
+  document.getElementById("chairGamePointsForPlayer2").innerHTML = playerTwo[1];
+  if (playerOne[1] > playerTwo[1]) {
+    document
+      .getElementById("chairGamePointsForPlayer1")
+      .classList.add("text-green-500");
+    document
+      .getElementById("chairGamePointsForPlayer2")
+      .classList.add("text-red-500");
+  } else if (playerTwo[1] < playerOne[1]) {
+    document
+      .getElementById("chairGamePointsForPlayer2")
+      .classList.add("text-green-500");
+    document
+      .getElementById("chairGamePointsForPlayer1")
+      .classList.add("text-red-500");
+  } else {
+    document
+      .getElementById("chairGamePointsForPlayer1")
+      .classList.add("text-green-500");
+    document
+      .getElementById("chairGamePointsForPlayer2")
+      .classList.add("text-green-500");
+  }
+}
 
 function chairGame() {
   chairAmount = document.getElementById("chairGameNumberInput").value;
