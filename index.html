@@ -9,18 +9,84 @@
     <script src="marci.js"></script>
     <script src="beni.js"></script>
     <script src="vince.js"></script>
-    ""
   </head>
   <body>
     <!-- ELSO -->
+     <div>
+      <div class="mb-2 border-b-2 w-200">
+        <h1 class="text-2xl font-bold">1. Relatív prímek</h1>
+      </div>
+      <form>
+        <label for="szam1" class="text-lg">Add meg a számot [2, 100] intervallumból: </label>
+        <input type="number" name="szam1" id="szam1" class="border-2 p-1 bg-gray-100">
+        <button onclick="relativ_primek()" type="button" class="border-2 text-lg p-1 mx-2 cursor-pointer bg-gray-300" id="primes_button">Számolásra fel!</button>
+      </form>
+      <div>
+        <h2 class="text-lg font-bold">A relatív prímek listája 2-től 100-ig:</h2>
+        <div id="primes_div" class="flex flex-wrap w-300">
+
+        </div>
+      </div>
+     </div>
 
     <!-- MASODIK -->
-    <div></div>
+    <div class="my-5 border rounded-md bg-orange-200 mx-10">
+      <div
+        id="chairGameInit"
+        class="mx-auto bg-slate-500 rounded-lg border border-slate-300 text-center w-fit p-3 m-5"
+      >
+        <p class="mx-auto">Adja meg a játékosok neveit:</p>
+        <br />
+        <form action="">
+          <label for="chairGamePlayer1">Első játékos neve:</label
+          ><input
+            type="text"
+            name=""
+            id="chairGamePlayer1"
+            class="w-fit bg-gray-300 border rounded-md ml-1"
+            value=""
+          />
+          <label for="chairGamePlayer2">Második játékos neve:</label
+          ><input
+            type="text"
+            name=""
+            id="chairGamePlayer2"
+            class="w-fit bg-gray-300 border rounded-md ml-1"
+            value=""
+          />
+          <br />
+          <label for="chairGameNumberInput">Székek száma:</label
+          ><input
+            class="w-fit bg-gray-300 border rounded-md mt-2 ml-1"
+            type="number"
+            name=""
+            id="chairGameNumberInput"
+            min="10"
+            max="20"
+            value="10"
+          />
+        </form>
+        <br />
+        <button
+          class="bg-green-500 p-1 mt-3 rounded-md border border-green-700 hover:bg-green-400 hover:border-green-600 cursor-pointer"
+          onclick="canStartChairGame()"
+        >
+          Indítás
+        </button>
+      </div>
+      <div id="chairsDiv" class="hidden flex"></div>
+    </div>
     <!-- HARMADIK -->
     <canvas id="piros" width="500" height="300"></canvas>
     <p id="piros_win"></p>
     <input id="piros_speed" type="number" min="0.1" max="0.7" step="0.05" value="0.5"/>
     <button onclick="piros_init()">start</button>
+    <!-- NEGYEDIK -->
+
+    <!-- ÖTÖDIK -->
+
+    <!-- HATODIK -->
+     
   </body>
   <script src=""></script>
 </html>
