@@ -27,6 +27,7 @@ class Card {
     ctx.roundRect(this.x-this.sx*this.flip_multiplyer/2,this.y-this.sy/2-this.hover_pos,this.sx*this.flip_multiplyer,this.sy,10)
     ctx.fillStyle=this.back?gradient:this.color
     ctx.fill()
+    ctx.lineWidth=3
     ctx.strokeStyle="#999999"
     ctx.stroke()
   }
@@ -143,13 +144,18 @@ async function gameloop(){
     await wait(1)
     for (card of cards){card.flip(true)}
     await wait(1)
-    for (let i = 0; i < random(5,15); i++) {
+    let previous=[0,1,2]
+    for (let i = 0; i < random(10,30); i++) {
         let num=[0,1,2]
         let order=[]
-        while(num.length>0){
+        while(num.length>0 && previous[0]!=order[0]){
 
             order.push(num.splice(random(0,num.length),1)[0])
         }
+        if (previous[0]==order[0]){
+            order=[previous[0],previous[2],previous[1]]
+        }
+        previous=order
         await place_cards(movetime,order)
         
     }
