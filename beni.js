@@ -171,7 +171,7 @@ function initMemoryGame() {
   canvasElement.addEventListener("click", memoryGameClick);
   canvasElement.addEventListener("mousemove", memoryGameMouse);
   circleAmount = document.getElementById("memoryGameDifficulty").value;
-  for (let i = 0; i < circleAmount; i++) {
+  for (let i = 1; i < circleAmount+1; i++) {
     let x = Math.floor(Math.random() * 475);
     let y = Math.floor(Math.random() * 475);
 
@@ -233,7 +233,12 @@ async function memoryGameClick() {
   var y = event.clientY - rect.top;
   for (e of circles) {
     if (e.is_hovering(x, y)) {
-      if (e.number == clicked_circles.length) {
+      if (e.number == clicked_circles.length+1) {
+        if (e.number==1){
+          for (e of circles){
+            e.isNumberVisible=false
+          }
+        }
         clicked_circles.push(e);
         e.isVisible = false;
         if (e.number == circles.length - 1) {
