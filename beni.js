@@ -142,6 +142,7 @@ let memoryGameWaiters = [];
 let circleAmount = 3;
 let isMemoryGameOver = false;
 let canvasElement;
+let clicked_circles=[]
 
 function initMemoryGame() {
   canvasElement = document.getElementById("memoryGame");
@@ -156,6 +157,8 @@ function initMemoryGame() {
 
     circles.push(new memoryGameObject(x,y,i));
   }
+
+  memoryGameRender()
 }
 
 class memoryGameObject {
@@ -167,7 +170,7 @@ class memoryGameObject {
     this.number = number;
   }
 
-  async draw() {
+  draw() {
     memoryGameCtx.beginPath();
     memoryGameCtx.arc(this.x, this.y, circleSize, 0, 2 * Math.PI);
     memoryGameCtx.lineWidth = 1;
@@ -175,6 +178,14 @@ class memoryGameObject {
     memoryGameCtx.fillText(this.number, this.x, this.y);
     memoryGameCtx.stroke();
   }
+  is_hovering(x,y){
+    if(x < this.x + circleSize &&
+      x > this.x - circleSize &&
+      (y < this.y + circleSize, y > this.y - circleSize)){
+        return true
+      }
+  }
+  
 }
 
 function memoryGameMouse() {
@@ -188,15 +199,19 @@ async function memoryGameClick() {
   var x = event.clientX - rect.left;
   var y = event.clientY - rect.top;
   for (e of circles) {
-    document.getElementById("piros_win").innerHTML =
-      e.color == "red" ? "nyertél" : "vesztettél";
-    for (i of cards) {
-      i.can_hover = false;
+    if (e.is_hovering(x,y)){
+      
 
-      gameover_callback();
-      canvasElement.removeEventListener("mousemove", mouse);
-      canvasElement.removeEventListener("click", click);
-      break;
+        if (e.number==clicked_circles.length){
+
+          clicked_circles.push(e)
+          e.isVisible=false
+          if(e.number==circles.length-1){
+            win()
+          }
+        }
+        else{gameover()}
+      break
     }
   }
 }
@@ -214,4 +229,15 @@ function memoryGameRender() {
   if (!isMemoryGameOver) {
     setTimeout(memoryGameRender, 1000 / fps);
   }
+}
+function gameover(){
+  console.log("gameover")
+  circles=[]
+  isMemoryGameOver=true
+  //TODO valami ami gameover
+}
+function win(){
+  circles=[]
+  isMemoryGameOver=true
+  console.log("win")
 }
