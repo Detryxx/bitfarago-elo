@@ -1,4 +1,5 @@
-function piros_init(){
+let piros=null
+async function piros_init(){
 const fps=60
 let ctx
 let gradient
@@ -7,6 +8,7 @@ let cards=[]
 let waiters=[]
 let can_click=false
 let gameover=false
+let gameover_callback
 class Card {
   constructor(color,back = false, x = 100, y = 100, sx = 100, sy = 200) {
     this.color = color;
@@ -45,7 +47,6 @@ class Card {
     }
   }
   async hover(time = 0.3) {
-    console.log("starthover")
     const start = this.hover_pos;
     const difference = this.is_hover * 10 - start;
     for (let i = 0; i < time; i += 1 / fps) {
@@ -75,6 +76,7 @@ class Card {
     }
   }
   is_hovering(x, y) {
+    console.log(this.color,x,y,this.x + this.sx / 2,this.x - this.sx / 2,this.y + this.sy / 2,this.y - this.sy / 2)
     const res =
       this.can_hover &&
       x < this.x + this.sx / 2 &&
@@ -159,23 +161,35 @@ function mouse(){
     var x = event.clientX - rect.left;
     var y = event.clientY - rect.top;
     for(e of cards){
-        e.is_hovering(x,y)
+        // e.is_hovering(x,y)
     }
 }
 async function click(){
     if (can_click){
-
+        
         var rect = canvas_element.getBoundingClientRect();
         var x = event.clientX - rect.left;
         var y = event.clientY - rect.top;
         for(e of cards){
             if (e.is_hovering(x,y)){
+                console.log(e.color)
+                document.getElementById("piros_win").innerHTML= (e.color=="red") ? "nyertél" : "vesztettél"
+                for (i of cards){
+                    i.can_hover=false
+                }
                 await e.flip(false)
-                document.getElementById("piros_win").innerHTML=e.color=="red"?"nyertél":"vesztettél"
-                gameover=true
+                gameover_callback()
+                canvas_element.removeEventListener("mousemove", mouse)
+                canvas_element.removeEventListener("click", click)
                 break
             }
         }
     }
 }
+
+await new Promise((r,_)=>{gameover_callback=r})
+gameover=true
+console.log(piros)
+piros=null
+console.log(piros)
 }
