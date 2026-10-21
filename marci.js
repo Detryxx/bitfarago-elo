@@ -170,8 +170,9 @@ async function click(){
         var y = event.clientY - rect.top;
         for(e of cards){
             if (e.is_hovering(x,y)){
+                console.log(e.color,e.color=="red",(e.color=="red")?"nyertél":"vesztettél")
+                document.getElementById("piros_win").innerHTML= (e.color=="red") ?"nyertél":"vesztettél"
                 await e.flip(false)
-                document.getElementById("piros_win").innerHTML=e.color=="red"?"nyertél":"vesztettél"
                 gameover=true
                 break
             }
