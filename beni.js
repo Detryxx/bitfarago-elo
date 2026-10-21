@@ -172,16 +172,16 @@ function initMemoryGame() {
   canvasElement.addEventListener("mousemove", memoryGameMouse);
   circleAmount = document.getElementById("memoryGameDifficulty").value;
   for (let i = 1; i < circleAmount+1; i++) {
-    let x = Math.floor(Math.random() * 475 + 10);
-    let y = Math.floor(Math.random() * 475 + 10);
+    let x = Math.floor(Math.random() * 475);
+    let y = Math.floor(Math.random() * 475);
 
     while (
       allXPosS.includes(x) ||
       allYPosS.includes(y) ||
       !collisionDetection(x, y)
     ) {
-      x = Math.floor(Math.random() * 475 + 10);
-      y = Math.floor(Math.random() * 475 + 10);
+      x = Math.floor(Math.random() * 475);
+      y = Math.floor(Math.random() * 475);
       console.log("while");
     }
 
