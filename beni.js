@@ -89,17 +89,29 @@ function moveToChair(chairNum) {
 function chairGameOver() {
   document.getElementById("chairsDiv").classList.add("hidden");
   document.getElementById("chairGameOverDiv").classList.remove("hidden");
-  document.getElementById("chairGamePointsForPlayer1").innerHTML=playerOne[1]
-  document.getElementById("chairGamePointsForPlayer2").innerHTML=playerTwo[1]
-  if (playerOne[1] > playerTwo[1]){
-  document.getElementById("chairGamePointsForPlayer1").classList.add("text-green-500")
-  document.getElementById("chairGamePointsForPlayer2").classList.add("text-red-500")
-  } else if (playerTwo[1] < playerOne[1]){
-    document.getElementById("chairGamePointsForPlayer2").classList.add("text-green-500")
-  document.getElementById("chairGamePointsForPlayer1").classList.add("text-red-500")
-  } else{
-    document.getElementById("chairGamePointsForPlayer1").classList.add("text-green-500")
-  document.getElementById("chairGamePointsForPlayer2").classList.add("text-green-500")
+  document.getElementById("chairGamePointsForPlayer1").innerHTML = playerOne[1];
+  document.getElementById("chairGamePointsForPlayer2").innerHTML = playerTwo[1];
+  if (playerOne[1] > playerTwo[1]) {
+    document
+      .getElementById("chairGamePointsForPlayer1")
+      .classList.add("text-green-500");
+    document
+      .getElementById("chairGamePointsForPlayer2")
+      .classList.add("text-red-500");
+  } else if (playerTwo[1] < playerOne[1]) {
+    document
+      .getElementById("chairGamePointsForPlayer2")
+      .classList.add("text-green-500");
+    document
+      .getElementById("chairGamePointsForPlayer1")
+      .classList.add("text-red-500");
+  } else {
+    document
+      .getElementById("chairGamePointsForPlayer1")
+      .classList.add("text-green-500");
+    document
+      .getElementById("chairGamePointsForPlayer2")
+      .classList.add("text-green-500");
   }
 }
 
